@@ -7,28 +7,117 @@ class SList2(SList):
 
     
     def delLargestSeq(self): 
-        #implement here your solution
+        index = 0
+        finalIndex = 0
+        count = 0
+        tempNode = self._head
+        flag = False
+        max = 0
+        once = True
+        
+        if (self._size == 1):
+            self.removeFirst()
+            
+        elif self._size != 0:
+            for i in range (self._size):
+                
+                if tempNode.elem == tempNode.next.elem:
+                    once = False
+                    if flag == False:
+                        index = i
+                        count = 2
+                        flag = True
+                    else :
+                        flag = True
+                        count += 1        
+                        
+                else:
+                    if count >= max and once == False:
+                        max = count
+                        finalIndex = index
+                    flag = False
+                    count = 0
+                    
+                if i == self._size - 1:
+                    if count >= max:
+                        
+                        max = count - 1
+                        finalIndex = index
+                    flag = False
+                    count = 0
+                    
+                if once == True:
+                    finalIndex = self._size -1
+                    max = 1
+                    
 
-        pass
-
-
-
-
-
-
-
+                if i != (self._size - 2):    
+                    tempNode = tempNode.next        
+                            
+            if max != 0:
+                for i in range (finalIndex , (finalIndex + max)):
+                    self.removeAt(finalIndex)
+     
 
 
     def fix_loop(self):
-        #implement here your solution
-
-        pass
-		
-		
-
+        flag = False
+        
+        tempNode = self._head
+        secondNode = self._head
 
 
+        while secondNode and secondNode.next :
+            
+            tempNode = tempNode.next
+            secondNode = secondNode.next.next
 
+            if tempNode == secondNode:
+                flag = True
+                
+                break
+
+        if not flag:
+            return False
+
+
+        loopSize = 1
+        secondNode = secondNode.next
+        
+        while tempNode != secondNode:
+            secondNode = secondNode.next
+            loopSize += 1
+
+ 
+        tempNode = self._head
+        secondNode = self._head
+
+
+        for i in range(loopSize):
+            secondNode = secondNode.next
+
+        prevSecondNode = None
+        
+        while tempNode != secondNode:
+            tempNode = tempNode.next
+            prevSecondNode = secondNode
+            secondNode = secondNode.next
+
+
+        if prevSecondNode == None:  
+            tempNode = self._head
+            
+            for i in range(loopSize - 1):
+                tempNode = tempNode.next
+                
+                
+            tempNode.next = None
+            
+        else:
+            prevSecondNode.next = None
+        return True
+
+     
 
 
     def create_loop(self, position):
@@ -54,66 +143,33 @@ class SList2(SList):
 		
 	
     def leftrightShift(self,left,n):
-        #implement here your solution
+        if n <= 0 or n > self._size:
+            return
 
-        pass
-
-
-
-
-
-
-
-
-if __name__=='__main__':
-
-    l=SList2()
-    print("list:",str(l))
-    print("len:",len(l))
-
-    for i in range(7):
-        l.addLast(i+1)
-
-    print(l)
-    print()
-
-    l=SList2()
-    print("list:",str(l))
-    print("len:",len(l))
-
-    for i in range(7):
-        l.addLast(i+1)
-
-    print(l)
-    print()
-
-    # No loop yet, no changes applied
-    l.fix_loop()
-    print("No loop yet, no changes applied")
-    print(l)
-    print()
-
-    # We force a loop
-    l.create_loop(position=6)
-    l.fix_loop()
-    print("Loop fixed, changes applied")
-    print(l)
-    print()
-    print()
-
-    
-    l = SList2()
-    for i in [1,2,3,4,5]:        
-        l.addLast(i)
-    print(l.delLargestSeq())
+        if left == True:
+            for i in range (n):
+                tempNode = self._head
+                elem = tempNode.elem
+                self.removeFirst()
+                self.addLast(elem)
+        else:
+            for i in range (n):
+                tempNode = self._head
+                for k in range (self._size - 1):
+                    tempNode = tempNode.next
+            
+                elem = tempNode.elem
+                self.removeLast()
+                self.addFirst(elem)
 
 
-    l=SList2()
-    for i in range(7):
-         l.addLast(i+1)
+    def toList(self):
+        result = []
+        current = self._head
+        while current:
+            result.append(current.elem)
+            current = current.next
+        return result
 
-    print(l)
-    l.leftrightShift(False, 2)
-    print(l)
-    
+
     
